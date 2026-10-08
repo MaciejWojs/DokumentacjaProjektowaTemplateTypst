@@ -1,7 +1,8 @@
 // Czcionki i przełączniki wspólne dla całego szablonu.
 
-#let font-sans = ("Liberation Sans")
-#let font-mono = ("Liberation Mono", "DejaVu Sans Mono", "Courier New")
+// Liberation jest pierwsza. DejaVu jest w Ubuntu.
+#let font-sans = ("Liberation Sans", "DejaVu Sans")
+#let font-mono = ("Liberation Mono", "DejaVu Sans Mono")
 
 // W main.typ można podać tylko zmieniane pola.
 #let knobs-domyslne = (

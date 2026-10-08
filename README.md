@@ -2,7 +2,7 @@
 
 Szablon dokumentacji zespołowego przedsięwzięcia inżynierskiego na Wydziale Nauk Inżynieryjnych Akademii Nauk Stosowanych w Nowym Sączu. Układ strony odpowiada szablonowi LaTeX z katalogu `Zespolowe-Przedsiewziecie-Inzynierskie-Docs-Template`: strona tytułowa, nagłówek, stopka z numerem „n z N”, pięć rozdziałów, literatura numeryczna oraz spisy rysunków, tabel i listingów.
 
-Czcionka tekstu to Liberation Sans, a kodu Liberation Mono.
+Czcionka tekstu to Liberation Sans, a gdy jej nie ma, DejaVu Sans. Kod używa Liberation Mono, a w razie braku DejaVu Sans Mono. Obie zapasowe są w Ubuntu.
 
 ## Gdzie co zmienić
 

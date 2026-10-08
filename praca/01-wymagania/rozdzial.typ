@@ -44,7 +44,7 @@ Blok kodu domyślnie numeruje linie, ma tło `#f2f2eb` i nie ma ramki. W `knobs.
   knobs: knobs,
 )", jezyk: "typ")
 
-Czcionka tekstu to Liberation Sans, a kodu Liberation Mono. Margines wewnętrzny ma 3,5 cm, a zewnętrzny, górny i dolny po 2,5 cm. Interlinii, nagłówka i stopki nie zmienia się w plikach rozdziałów.
+Czcionka tekstu to Liberation Sans, a gdy jej nie ma, DejaVu Sans. Kod używa Liberation Mono, a w razie braku DejaVu Sans Mono. Margines wewnętrzny ma 3,5 cm, a zewnętrzny, górny i dolny po 2,5 cm. Interlinii, nagłówka i stopki nie zmienia się w plikach rozdziałów.
 
 == Rozdziały
 
