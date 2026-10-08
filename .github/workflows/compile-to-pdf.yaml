@@ -1,0 +1,26 @@
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: install typst
+        run: |
+          sudo snap install typst
+
+      - name: Compile PDF
+        run: |
+          typst compile main.typ
+
+      - name: Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: main.pdf
