@@ -6,15 +6,13 @@ on:
 jobs:
   compile:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/maciejwojs/ubuntu-typst
     permissions:
       contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
-
-      - name: install typst
-        run: |
-          sudo snap install typst
 
       - name: Compile PDF
         run: |
