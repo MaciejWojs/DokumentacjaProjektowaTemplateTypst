@@ -1,6 +1,6 @@
 // Blok kodu: kolory, numeracja linii, ramka.
 
-#import "wspolne.typ": font-mono, polacz, stan-knobs
+#import "wspolne.typ": font-mono, polacz, stan-knobs, z-priorytetem
 
 #let _hex(kolor) = {
   let zapis = kolor.to-hex()
@@ -41,15 +41,15 @@
   if z.ends-with("\n") { z.slice(0, -1) } else { z }
 }
 
-// Kod w akapicie ma rozmiar tekstu. Zwykły napis łamie się na spacjach; `raw` jest jednym pudełkiem i rozpycha wiersz.
-#let kod-w-akapicie(t) = text(font: font-mono, size: 1em, t)
+// Ta sama czcionka i ten sam rozmiar co akapit. Kolor tylko odróżnia nazwę.
+#let kod-w-akapicie(t) = context text(fill: stan-knobs.get().tekst.kolor-kodu, t)
 
 // Reguły `show` są w zwykłej funkcji, nie w `context`, żeby nie obejmowały kodu poza blokiem.
-#let _rysuj-kod(kod, jezyk, paleta, numery) = {
-  set par(leading: 0.45em, spacing: 0pt, first-line-indent: 0pt, justify: false)
+#let _rysuj-kod(kod, jezyk, paleta, numery, interlinia, czcionka) = {
   set align(left)
-  set text(font: font-mono, size: 1em, fill: paleta.kolor-tekstu, hyphenate: false)
-  show raw: set text(font: font-mono, size: 1em)
+  set text(font: czcionka, size: 1em, fill: paleta.kolor-tekstu, hyphenate: false)
+  set par(leading: interlinia * 1em, spacing: 0pt, first-line-indent: 0pt, justify: false)
+  show raw: set text(font: czcionka, size: 1em)
   show raw.where(block: true): set block(breakable: true, width: 100%)
   show raw.line: it => {
     block(width: 100%, breakable: false)[
@@ -82,7 +82,15 @@
 // `numeracja`: auto bierze knobs, true/false wymusza numery linii.
 // `kolory`: słownik nadpisujący pola z knobs.kod, także `ramka` i `kolor-ramki`.
 #let blok-kodu(kod, jezyk: none, numeracja: auto, kolory: (:)) = context {
-  let paleta = polacz(stan-knobs.get().kod, kolory)
+  let knobs = stan-knobs.get()
+  let paleta = polacz(knobs.kod, kolory)
   let numery = if numeracja == auto { paleta.numeracja } else { numeracja }
-  _rysuj-kod(kod, jezyk, paleta, numery)
+  _rysuj-kod(
+    kod,
+    jezyk,
+    paleta,
+    numery,
+    knobs.tekst.interlinia,
+    z-priorytetem(knobs.tekst.czcionka-kodu, font-mono),
+  )
 }

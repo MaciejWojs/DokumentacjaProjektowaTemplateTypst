@@ -6,14 +6,17 @@
 // Bibliografia: praca/literatura.bib.
 // Listing z pliku: #listing([Opis], plik: "/kod/plik.cpp", jezyk: "cpp") <etykieta>
 
-#import "szablon/template.typ": (
-  praca, spis-tresci, bibliografia, spis-rysunkow, spis-tabel, spis-listingow,
-)
+#import "szablon/template.typ": bibliografia, praca, spis-listingow, spis-rysunkow, spis-tabel, spis-tresci
 
 // Tylko różnice wobec domyślnych. `dokument` to „DOKUMENTACJA PROJEKTU”.
 // Stronnicowanie: "n-z-n" albo "prosty".
 #let knobs = (
   stronnicowanie: "prosty",
+  tekst: (
+    justowanie: true,
+    sieroty: true,
+    czcionka: "Times New Roman",
+  ),
   kod: (
     numeracja: false,
     ramka: true,

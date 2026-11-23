@@ -15,6 +15,7 @@
 #import "czesci/spisy.typ" as spisy
 #import "czesci/praca.typ" as dokument
 
+#let font-serif = wspolne.font-serif
 #let font-sans = wspolne.font-sans
 #let font-mono = wspolne.font-mono
 #let knobs-domyslne = wspolne.knobs-domyslne
@@ -30,6 +31,7 @@
 #let tabela = obiekty.tabela
 #let listing = obiekty.listing
 #let listing-plik = obiekty.listing-plik
+#let zalacz = obiekty.zalacz
 #let odnosnik = obiekty.odnosnik
 #let numer-w-sekcji = obiekty.numer-w-sekcji
 

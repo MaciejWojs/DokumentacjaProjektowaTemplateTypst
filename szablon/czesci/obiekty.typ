@@ -1,11 +1,29 @@
 // Rysunek, tabela, listing i odsyłacz w tekście.
 
 #import "kod.typ": blok-kodu
+#import "strona.typ": jako-tekst
+#import "wspolne.typ": stan-knobs
 
-#let _podpis(it, nazwa) = {
+#let _zalaczone = state("zpi-zalaczniki", ())
+
+// Dołącza plik do PDF. Ten sam plik dołącza się raz. `wlaczony: false` nic nie dodaje.
+#let zalacz(plik, wlaczony: true, opis: none) = context {
+  if not wlaczony { return }
+  if plik in _zalaczone.get() { return }
+  _zalaczone.update(stare => stare + (plik,))
+  let opis-tekst = if opis == none { "" } else { jako-tekst(opis).trim() }
+  pdf.attach(
+    plik,
+    relationship: "data",
+    mime-type: "text/plain",
+    description: if opis-tekst == "" { plik } else { opis-tekst },
+  )
+}
+
+#let _podpis(it, nazwa, rozmiar, interlinia) = {
   if it.caption == none { return }
-  set text(size: 10.5pt)
-  set par(leading: 0.35em, spacing: 0pt, first-line-indent: 0pt, justify: false)
+  set text(size: 0.875 * rozmiar)
+  set par(leading: interlinia, spacing: 0pt, first-line-indent: 0pt, justify: false)
   let cialo = it.caption.body
   grid(
     columns: (auto, 1fr),
@@ -19,19 +37,25 @@
   )
 }
 
-#let pokaz-figure(it, nazwa, podpis-nad: false) = {
+#let _znacznik-dzielonej = "zpi-tabela-dzielona"
+
+#let pokaz-figure(it, nazwa, podpis-nad: false) = context {
+  let tekst = stan-knobs.get().tekst
+  let rozmiar = tekst.rozmiar
+  let interlinia = tekst.interlinia * rozmiar
+  let odstep = 1.5 * interlinia
   set par(first-line-indent: 0pt, justify: false)
-  block(above: 14pt, below: 14pt, breakable: true)[
-    #if podpis-nad [
-      #align(center, _podpis(it, nazwa))
-      #v(9pt)
-      #align(center, it.body)
-    ] else [
-      #align(center, it.body)
-      #v(6pt)
-      #align(center, _podpis(it, nazwa))
-    ]
-  ]
+  let dzielona = (
+    it.kind == table
+      and it.body.has("children")
+      and it.body.children.any(c => c.func() == metadata and c.value == _znacznik-dzielonej)
+  )
+  let podpis = block(spacing: odstep, sticky: podpis-nad, align(center, _podpis(it, nazwa, rozmiar, interlinia)))
+  let lamany = it.kind == "listing" or dzielona
+  let tresc = block(spacing: odstep, breakable: lamany, align(center, it.body))
+  block(above: 2 * odstep, below: 2 * odstep, breakable: lamany, {
+    if podpis-nad { podpis + tresc } else { tresc + podpis }
+  })
 }
 
 #let numer-w-sekcji(n) = context {
@@ -71,14 +95,16 @@
   caption: tytul,
 )
 
-#let tabela(tytul, tresc) = figure(
-  tresc,
+// `dzielona: true` pozwala przenieść część wierszy na następną stronę.
+// Nagłówek `table.header` powtarza się wtedy na każdej stronie.
+#let tabela(tytul, tresc, dzielona: false) = figure(
+  if dzielona { [#metadata(_znacznik-dzielonej)#tresc] } else { tresc },
   kind: table,
   supplement: [Tab.],
   caption: tytul,
 )
 
-#let listing(podpis, ..args, plik: none, jezyk: none, numeracja: auto, kolory: (:)) = {
+#let listing(podpis, ..args, plik: none, jezyk: none, numeracja: auto, kolory: (:), zalacznik: auto) = {
   let kod = if args.pos().len() > 0 {
     args.pos().first()
   } else {
@@ -100,7 +126,19 @@
     none
   }
   figure(
-    blok-kodu(zrodlo, jezyk: lang, numeracja: numeracja, kolory: kolory),
+    {
+      context {
+        let dolacz = if zalacznik == auto {
+          stan-knobs.get().kod.zalacznik
+        } else {
+          zalacznik
+        }
+        if dolacz and plik != none {
+          zalacz(plik, opis: podpis)
+        }
+      }
+      blok-kodu(zrodlo, jezyk: lang, numeracja: numeracja, kolory: kolory)
+    },
     kind: "listing",
     supplement: [Listing],
     caption: podpis,
@@ -108,10 +146,11 @@
 }
 
 // Ścieżka od katalogu głównego projektu, z ukośnikiem na początku: "/kod/main.cpp".
-#let listing-plik(sciezka, podpis, jezyk: none, numeracja: auto, kolory: (:)) = listing(
+#let listing-plik(sciezka, podpis, jezyk: none, numeracja: auto, kolory: (:), zalacznik: auto) = listing(
   podpis,
-  read(sciezka),
+  plik: sciezka,
   jezyk: jezyk,
   numeracja: numeracja,
   kolory: kolory,
+  zalacznik: zalacznik,
 )

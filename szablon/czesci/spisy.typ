@@ -1,20 +1,45 @@
 // Spis treści, literatura i spisy rysunków, tabel oraz listingów.
+// Każdy zaczyna własną stronę. `wlaczony: false` pomija dany spis.
+// Treść po spisie treści zaczyna się od nowej strony.
 
-#let spis-tresci(tytul: [Spis treści]) = {
+#let spis-tresci(tytul: [Spis treści], wlaczony: true) = {
+  if not wlaczony { return }
+  pagebreak(weak: true)
   heading(level: 1, numbering: none, outlined: false)[#tytul]
   outline(title: none, depth: 4)
+  pagebreak(weak: true)
 }
 
-#let bibliografia(tytul: [Literatura], plik: "/praca/literatura.bib") = {
+#let bibliografia(
+  tytul: [Literatura],
+  plik: "/praca/literatura.bib",
+  wlaczony: true,
+) = {
+  if not wlaczony { return }
+  pagebreak(weak: true)
   heading(level: 1)[#tytul]
   bibliography(plik, title: none, style: "ieee")
 }
 
-#let _spis(tytul, cel) = {
+#let _spis(tytul, cel, wlaczony: true) = {
+  if not wlaczony { return }
+  pagebreak(weak: true)
   heading(level: 1, numbering: none)[#tytul]
   outline(title: none, target: cel)
 }
 
-#let spis-rysunkow(tytul: [Spis rysunków]) = _spis(tytul, figure.where(kind: image))
-#let spis-tabel(tytul: [Spis tabel]) = _spis(tytul, figure.where(kind: table))
-#let spis-listingow(tytul: [Spis listingów]) = _spis(tytul, figure.where(kind: "listing"))
+#let spis-rysunkow(tytul: [Spis rysunków], wlaczony: true) = _spis(
+  tytul,
+  figure.where(kind: image),
+  wlaczony: wlaczony,
+)
+#let spis-tabel(tytul: [Spis tabel], wlaczony: true) = _spis(
+  tytul,
+  figure.where(kind: table),
+  wlaczony: wlaczony,
+)
+#let spis-listingow(tytul: [Spis listingów], wlaczony: true) = _spis(
+  tytul,
+  figure.where(kind: "listing"),
+  wlaczony: wlaczony,
+)

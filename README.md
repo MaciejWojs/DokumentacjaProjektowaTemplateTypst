@@ -2,7 +2,7 @@
 
 Szablon dokumentacji zespołowego przedsięwzięcia inżynierskiego na Wydziale Nauk Inżynieryjnych Akademii Nauk Stosowanych w Nowym Sączu. Układ strony odpowiada szablonowi LaTeX z katalogu `Zespolowe-Przedsiewziecie-Inzynierskie-Docs-Template`: strona tytułowa, nagłówek, stopka z numerem „n z N”, pięć rozdziałów, literatura numeryczna oraz spisy rysunków, tabel i listingów.
 
-Czcionka tekstu to Liberation Sans, a kodu Liberation Mono.
+Czcionka tekstu to Times New Roman, a gdy jej nie ma w systemie — Liberation Serif. Kod jest krojem Liberation Mono. Akapit jest justowany, a jednoliterowy spójnik schodzi na początek następnej linii.
 
 ## Gdzie co zmienić
 
@@ -10,7 +10,7 @@ Dane projektu są w `main.typ`.
 
 - W `main.typ` podaje się tylko to, co różni się od domyślnych: zwykle tytuł, przedmiot, autorów i prowadzącego. Uczelnia, wydział, katedra i `dokument` („DOKUMENTACJA PROJEKTU”) są w szablonie. Nagłówek bierze nazwę uczelni. Stopka składa się z `dokument` i przedmiotu. Dla sprawozdania laboratoryjnego dopisuje się na przykład `dokument: [SPRAWOZDANIE]`.
 - Autorzy to lista napisów; puste wpisy są pomijane. `rok: auto` wstawia bieżący rok.
-- Słownik `knobs` ustawia stronnicowanie, kolor hiperłączy i blok kodu. Podaj tylko pola, które zmieniasz. `stronnicowanie: "n-z-n"` daje „2 z 13”, a `"prosty"` sam numer strony. `kolor-linku: none` zostawia łącza w kolorze tekstu. W `knobs.kod` są `numeracja`, `ramka`, `kolor-ramki` oraz kolory tła, tekstu, numerów linii, słów kluczowych, komentarzy i napisów.
+- Słownik `knobs` ustawia stronnicowanie, kolor hiperłączy, tekst i blok kodu. Podaj tylko pola, które zmieniasz. W `knobs.tekst` są `justowanie`, `sieroty` i `czcionka` (domyślnie Times New Roman). `stronnicowanie: "n-z-n"` daje „2 z 13”, a `"prosty"` sam numer strony. `kolor-linku: none` zostawia łącza w kolorze tekstu. W `knobs.kod` są `numeracja`, `ramka`, `kolor-ramki` oraz kolory tła, tekstu, numerów linii, słów kluczowych, komentarzy i napisów.
 - Pojedynczy listing może to nadpisać: `numeracja: false` albo `kolory: (tlo: rgb("#eeeeee"))`.
 
 Rozdziały leżą w `praca/`. Nowy rozdział to plik `praca/<nazwa>/rozdzial.typ` oraz `#include` w `main.typ`. Bibliografia jest w `praca/literatura.bib` i wchodzi do dokumentu tylko wtedy, gdy tekst ją cytuje (`#cite(<klucz>)`). Pliki z kodem trzymaj w `kod/`. Rozdziały importują `szablon/template.typ`. Części składu są w `szablon/czesci/`: `wspolne.typ` (czcionki i knobs), `strona.typ` (strona tytułowa, nagłówek, stopka), `kod.typ` (blok kodu), `obiekty.typ` (rysunek, tabela, listing, odsyłacz), `spisy.typ` (spisy i literatura), `praca.typ` (marginesy i reguły dokumentu).
