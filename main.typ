@@ -10,6 +10,7 @@
 
 // Tylko różnice wobec domyślnych. `dokument` to „DOKUMENTACJA PROJEKTU”.
 // Stronnicowanie: "n-z-n" albo "prosty".
+// Styl strony: "ksiazka" albo "prosty" (kolumna na środku).
 #let knobs = (
   stronnicowanie: "prosty",
   tekst: (

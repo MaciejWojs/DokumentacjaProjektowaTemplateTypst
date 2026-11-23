@@ -7,6 +7,24 @@
 #import "kod.typ": kod-w-akapicie
 #import "obiekty.typ": numer-w-sekcji, pokaz-figure
 
+// "ksiazka": margines wewnętrzny 3,5 cm, zewnętrzny 2,5 cm.
+// "prosty": po 3 cm z lewej i prawej, kolumna na środku. Góra i dół zostają 2,5 cm.
+#let _uklad-strony(styl) = {
+  if styl == "ksiazka" {
+    (
+      binding: left,
+      margin: (inside: 3.5cm, outside: 2.5cm, top: 2.5cm, bottom: 2.5cm),
+    )
+  } else if styl == "prosty" {
+    (
+      binding: left,
+      margin: (left: 3cm, right: 3cm, top: 2.5cm, bottom: 2.5cm),
+    )
+  } else {
+    panic("Nieznany styl strony: " + str(styl) + ". Użyj \"ksiazka\" albo \"prosty\".")
+  }
+}
+
 #let praca(
   uczelnia: ([AKADEMIA NAUK STOSOWANYCH], [W NOWYM SĄCZU]),
   wydzial: [Wydział Nauk Inżynieryjnych],
@@ -67,10 +85,11 @@
     }
   }
 
+  let uklad = _uklad-strony(ustawienia.styl-strony)
   set page(
     paper: "a4",
-    binding: left,
-    margin: (inside: 3.5cm, outside: 2.5cm, top: 2.5cm, bottom: 2.5cm),
+    binding: uklad.binding,
+    margin: uklad.margin,
     header: none,
     footer: none,
     numbering: none,

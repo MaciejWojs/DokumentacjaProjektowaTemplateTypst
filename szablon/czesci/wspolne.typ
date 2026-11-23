@@ -15,8 +15,11 @@
 // `czcionka` i `czcionka-kodu` są próbowane przed zapasowymi krojami.
 // `justowanie` wyrównuje akapit do obu marginesów. `sieroty` przenosi
 // jednoliterowy spójnik (a, i, o, u, w, z) na początek następnej linii.
+// `styl-strony`: "ksiazka" (szerszy margines od grzbietu) albo "prosty"
+// (równe marginesy, kolumna na środku strony). Szerokość kolumny jest ta sama.
 #let knobs-domyslne = (
   stronnicowanie: "n-z-n",
+  styl-strony: "ksiazka",
   kolor-linku: none,
   tekst: (
     rozmiar: 12pt,

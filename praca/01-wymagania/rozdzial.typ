@@ -1,4 +1,4 @@
-#import "/szablon/template.typ": rysunek, tabela, listing, blok-kodu, odnosnik
+#import "/szablon/template.typ": blok-kodu, listing, odnosnik, rysunek, tabela
 
 = Tutorial
 
@@ -8,7 +8,8 @@ Ten rozdział pokazuje, jak wypełnić szablon dokumentacji zespołowego przedsi
 
 Dane projektu wpisuje się w `main.typ`, w wywołaniu `praca`. Wpisuje się pola, które mają być inne niż w szablonie. Nazwa uczelni, wydział, katedra oraz napis „DOKUMENTACJA PROJEKTU” są w `szablon/template.typ`. Nagłówek strony bierze nazwę uczelni w jednej linii. Stopka składa się z rodzaju dokumentu i przedmiotu, na przykład „DOKUMENTACJA PROJEKTU - ZESPOŁOWE PRZEDSIĘWZIĘCIE INŻYNIERSKIE”.
 
-#blok-kodu("#show: praca.with(
+#blok-kodu(
+  "#show: praca.with(
   tytul: [Tytuł projektu\\ z drugą linią],
   przedmiot: [ZESPOŁOWE PRZEDSIĘWZIĘCIE INŻYNIERSKIE],
   autorzy: (
@@ -16,7 +17,9 @@ Dane projektu wpisuje się w `main.typ`, w wywołaniu `praca`. Wpisuje się pola
     \"Imię2 Nazwisko2\",
   ),
   prowadzacy: [mgr inż. Imię Nazwisko],
-)", jezyk: "typ")
+)",
+  jezyk: "typ",
+)
 
 Tytuł łamie się znakiem `\` wewnątrz nawiasu kwadratowego. Autorzy to lista napisów. Pusty napis jest pomijany, więc lista może mieć dowolną długość. Rok na stronie tytułowej jest rokiem kompilacji. Inny rok podaje się argumentem `rok: [2026]`.
 
@@ -24,14 +27,18 @@ Dla sprawozdania laboratoryjnego dopisuje się `dokument: [SPRAWOZDANIE]`. Stopk
 
 == Ustawienia składu
 
-Słownik `knobs` zmienia stronnicowanie, kolor łączy i blok kodu. Wpisuje się tylko pola, które mają się różnić od domyślnych. Pozostałe zostają.
+Słownik `knobs` zmienia stronnicowanie, styl strony, kolor łączy i blok kodu. Wpisuje się tylko pola, które mają się różnić od domyślnych. Pozostałe zostają.
 
 Domyślne stronnicowanie to `"n-z-n"`, czyli zapis „2 z 13”. Sam numer strony włącza `"prosty"`. Łącza są w kolorze tekstu, bo `kolor-linku` ma wartość `none`. Inny kolor podaje się na przykład jako `kolor-linku: blue`.
 
+Domyślny styl strony to `"ksiazka"`: margines wewnętrzny ma 3,5 cm, a zewnętrzny, górny i dolny po 2,5 cm. Styl `"prosty"` ustawia po 3 cm z lewej i z prawej, więc kolumna tekstu stoi na środku każdej strony. Szerokość kolumny zostaje taka sama. Góra i dół nadal mają po 2,5 cm.
+
 Blok kodu domyślnie numeruje linie, ma tło `#f2f2eb` i nie ma ramki. W `knobs.kod` zmienia się `numeracja`, `tlo`, `kolor-tekstu`, `kolor-numeru`, `kolor-slowa`, `kolor-komentarza`, `kolor-napisu`, `ramka` i `kolor-ramki`. Jeden listing może to nadpisać argumentami `numeracja` i `kolory`, bez zmiany reszty dokumentu.
 
-#blok-kodu("#let knobs = (
+#blok-kodu(
+  "#let knobs = (
   stronnicowanie: \"prosty\",
+  styl-strony: \"prosty\",
   kolor-linku: none,
   kod: (
     numeracja: false,
@@ -42,21 +49,26 @@ Blok kodu domyślnie numeruje linie, ma tło `#f2f2eb` i nie ma ramki. W `knobs.
 #show: praca.with(
   // tytuł, przedmiot, autorzy, prowadzący
   knobs: knobs,
-)", jezyk: "typ")
+)",
+  jezyk: "typ",
+)
 
-Czcionka tekstu to Liberation Sans, a kodu Liberation Mono. Margines wewnętrzny ma 3,5 cm, a zewnętrzny, górny i dolny po 2,5 cm. Interlinii, nagłówka i stopki nie zmienia się w plikach rozdziałów.
+Czcionka tekstu to Times New Roman, a gdy jej nie ma w systemie — Liberation Serif. Kod jest krojem Liberation Mono. Interlinii, nagłówka, stopki i marginesów nie zmienia się w plikach rozdziałów.
 
 == Rozdziały
 
 Nowy rozdział to katalog `praca/<nazwa>/` z plikiem `rozdzial.typ` oraz wiersz `#include` w `main.typ`, za spisem treści i przed bibliografią. Na początku pliku rozdziału importuje się funkcje szablonu.
 
-#blok-kodu("#import \"/szablon/template.typ\": rysunek, tabela, listing, odnosnik
+#blok-kodu(
+  "#import \"/szablon/template.typ\": rysunek, tabela, listing, odnosnik
 
 = Tytuł rozdziału
 
 Tekst akapitu.
 
-== Tytuł podrozdziału", jezyk: "typ")
+== Tytuł podrozdziału",
+  jezyk: "typ",
+)
 
 Nagłówek rozdziału to jeden znak `=`, podrozdział to `==`, a kolejny poziom to `===`. Na końcu tytułu nie stawia się kropki. Rysunek, tabelę i listing wstawia się po zdaniu, które do nich odsyła. Rozdział nie może składać się z samych obiektów.
 
@@ -93,12 +105,15 @@ Tag bez prefiksu `v` tej akcji nie uruchamia. Wypchnięcie samego commita też n
 
 Rysunek wstawia funkcja `rysunek`. Plik graficzny podaje się przez `image`. Ścieżka liczy się od pliku rozdziału, a szerokość podaje się przy `image`. Etykieta za wywołaniem, w nawiasie ostrym, służy do odesłania.
 
-#blok-kodu("#rysunek(
+#blok-kodu(
+  "#rysunek(
   image(\"sources/nazwa.png\", width: 12cm),
   [Opis rysunku],
 ) <id-rysunku>
 
-#odnosnik(<id-rysunku>)", jezyk: "typ")
+#odnosnik(<id-rysunku>)",
+  jezyk: "typ",
+)
 
 `odnosnik` przy rysunku dopisuje słowo „Rysunek”, numer w obrębie rozdziału i stronę. #odnosnik(<id-rysunku>) jest rysunkiem złożonym w Typst, bez osobnego pliku.
 
@@ -115,7 +130,8 @@ Podpis stoi pod rysunkiem. W spisie rysunków trafia ten sam opis.
 
 Tabelę wstawia funkcja `tabela`. Pierwszy argument to podpis, drugi to tabela Typst. W tekście przed odsyłaczem pisze się słowo „Tabela”, bo `odnosnik` podaje sam numer i stronę.
 
-#blok-kodu("#tabela(
+#blok-kodu(
+  "#tabela(
   [Opis tabeli],
   table(
     columns: 2,
@@ -125,7 +141,9 @@ Tabelę wstawia funkcja `tabela`. Pierwszy argument to podpis, drugi to tabela T
   ),
 ) <id-tabeli>
 
-Tabela #odnosnik(<id-tabeli>)", jezyk: "typ")
+Tabela #odnosnik(<id-tabeli>)",
+  jezyk: "typ",
+)
 
 Tabela #odnosnik(<tablica001>) podaje napięcie i prąd. W komórce może stać wzór.
 
@@ -147,17 +165,24 @@ Podpis stoi nad tabelą.
 
 Krótki fragment zapisany w pliku rozdziału wstawia się funkcją `listing`. Język podaje argument `jezyk`, żeby włączyć kolory składni. W tekście przed odsyłaczem pisze się „Kod”.
 
-#blok-kodu("#listing([Opis], ```cpp
+#blok-kodu(
+  "#listing([Opis], ```cpp
 int main() { return 0; }
 ```, jezyk: \"cpp\") <id-kodu>
 
-Kod #odnosnik(<id-kodu>)", jezyk: "typ")
+Kod #odnosnik(<id-kodu>)",
+  jezyk: "typ",
+)
 
 Kod #odnosnik(<listing-krotki>) zwraca zero.
 
-#listing([Krótki program], ```cpp
-int main() { return 0; }
-```, jezyk: "cpp") <listing-krotki>
+#listing(
+  [Krótki program],
+  ```cpp
+  int main() { return 0; }
+  ```,
+  jezyk: "cpp",
+) <listing-krotki>
 
 Dłuższy plik z katalogu `kod` wczytuje argument `plik`. Ścieżka zaczyna się ukośnikiem i jest liczona od katalogu głównego projektu. Jeden listing może wyłączyć numerację linii albo podać własne kolory: `numeracja: false`, `kolory: (tlo: rgb("#eeeeee"))`.
 
@@ -179,12 +204,15 @@ Plik z polskimi znakami wczytuje się tak samo. Kod #odnosnik(<prompt>) pokazuje
 
 Źródło podaje się w zdaniu przez `cite`, z kluczem z pliku `praca/literatura.bib`. Pozycja wchodzi do literatury tylko wtedy, gdy tekst ją cytuje. Styl numerów jest w szablonie.
 
-#blok-kodu("@book{legierski,
+#blok-kodu(
+  "@book{legierski,
   author = {Legierski, Tadeusz and Wyrwał, Janusz},
   title = {Programowanie Sterowników PLC},
   year = {1998},
 }
 
-Książkę przywołuje się tak: #cite(<legierski>).", jezyk: "typ")
+Książkę przywołuje się tak: #cite(<legierski>).",
+  jezyk: "typ",
+)
 
 Książkę przywołuje się tak: #cite(<legierski>). Stronę internetową przywołuje się tak: #cite(<www1>).
